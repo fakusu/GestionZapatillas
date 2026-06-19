@@ -13,7 +13,8 @@ namespace GestionZapatillas.Services.Mappers
                 Model = shoe.Model,
                 Price = shoe.Price,
                 BrandName = shoe.Brand?.BrandName ?? "",
-                SportName = shoe.Sport?.SportName ?? ""
+                SportName = shoe.Sport?.SportName ?? "",
+                Active = shoe.Active
             };
         }
 
@@ -52,6 +53,7 @@ namespace GestionZapatillas.Services.Mappers
                 SportId = shoe.SportId,
                 GenreId = shoe.GenreId,
                 Active = shoe.Active,
+                RowVersion = shoe.RowVersion,
                 Sizes = shoe.ShoeSizes.Select(sz => new ShoeSizeDto
                 {
                     SizeId = sz.SizeId,

@@ -1,20 +1,22 @@
 using FluentValidation;
 using GestionZapatillas.Data;
+using GestionZapatillas.Entities;
 using GestionZapatillas.Repositories.Interfaces;
 using GestionZapatillas.DTOs.Common;
 using GestionZapatillas.DTOs.Sport;
 using GestionZapatillas.Services.Interfaces;
 using GestionZapatillas.Services.Mappers;
+using Microsoft.EntityFrameworkCore;
 
 namespace GestionZapatillas.Services.Services
 {
     public class SportService : ISportService
     {
         private readonly ISportRepository _repository;
-        private readonly IValidator<Entities.Sport> _validator;
+        private readonly IValidator<Sport> _validator;
         private readonly IUnitOfWork _unitOfWork;
 
-        public SportService(ISportRepository repository, IValidator<Entities.Sport> validator, IUnitOfWork unitOfWork)
+        public SportService(ISportRepository repository, IValidator<Sport> validator, IUnitOfWork unitOfWork)
         {
             _repository = repository;
             _validator = validator;
@@ -31,7 +33,7 @@ namespace GestionZapatillas.Services.Services
         {
             var sport = _repository.GetById(id);
             if (sport == null)
-                return Result.Fail<SportDetailsDto>("Sport not found");
+                return Result.Fail<SportDetailsDto>("Deporte no encontrado.");
 
             return Result.Ok(SportMapper.ToDetailsDto(sport));
         }
@@ -40,7 +42,7 @@ namespace GestionZapatillas.Services.Services
         {
             var sport = _repository.GetById(id);
             if (sport == null)
-                return Result.Fail<SportUpdateDto>("Sport not found");
+                return Result.Fail<SportUpdateDto>("Deporte no encontrado.");
 
             return Result.Ok(SportMapper.ToUpdateDto(sport));
         }
@@ -61,17 +63,19 @@ namespace GestionZapatillas.Services.Services
             }
             catch (Exception ex)
             {
-                return Result.Fail($"Database error: {ex.InnerException?.Message ?? ex.Message}");
+                return Result.Fail($"Error al guardar: {ex.InnerException?.Message ?? ex.Message}");
             }
         }
 
         public Result Update(SportUpdateDto dto)
         {
-            var sport = _repository.GetById(dto.SportId);
-            if (sport == null)
-                return Result.Fail("Sport not found");
-
-            sport.SportName = dto.SportName;
+            var sport = new Sport
+            {
+                SportId = dto.SportId,
+                SportName = dto.SportName,
+                Active = true,
+                RowVersion = dto.RowVersion
+            };
 
             var validation = _validator.Validate(sport);
             if (!validation.IsValid)
@@ -79,12 +83,21 @@ namespace GestionZapatillas.Services.Services
 
             try
             {
+                _repository.Update(sport, dto.SportId, dto.RowVersion);
                 _unitOfWork.Save();
                 return Result.Ok();
             }
+            catch (KeyNotFoundException)
+            {
+                return Result.Fail("Deporte no encontrado.");
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return Result.Concurrency("El registro fue modificado por otro usuario.\nLos cambios no pueden guardarse porque los datos actuales son diferentes a los que usted visualizó.");
+            }
             catch (Exception ex)
             {
-                return Result.Fail($"Database error: {ex.InnerException?.Message ?? ex.Message}");
+                return Result.Fail($"Error al guardar: {ex.InnerException?.Message ?? ex.Message}");
             }
         }
 
@@ -92,17 +105,21 @@ namespace GestionZapatillas.Services.Services
         {
             var sport = _repository.GetById(id);
             if (sport == null)
-                return Result.Fail("Sport not found");
+                return Result.Fail("Deporte no encontrado.");
 
             try
             {
-                _repository.Delete(id);
+                _repository.Delete(id, sport.RowVersion);
                 _unitOfWork.Save();
                 return Result.Ok();
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                return Result.Concurrency("El registro fue modificado por otro usuario.\nNo se pudo eliminar.");
+            }
             catch (Exception ex)
             {
-                return Result.Fail($"Database error: {ex.InnerException?.Message ?? ex.Message}");
+                return Result.Fail($"Error al eliminar: {ex.InnerException?.Message ?? ex.Message}");
             }
         }
     }

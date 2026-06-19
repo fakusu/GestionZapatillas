@@ -11,6 +11,7 @@ namespace GestionZapatillas.DTOs.SportShoe
         public decimal Price { get; set; }
         public DateTime ReleaseDate { get; set; }
         public bool Active { get; set; }
+        public byte[] RowVersion { get; set; } = null!;
         public List<ShoeSizeDto> Sizes { get; set; } = new();
     }
 }

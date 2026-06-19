@@ -8,6 +8,7 @@ namespace GestionZapatillas.Repositories.Interfaces
         SportShoe? GetById(int id);
         void Add(SportShoe sportShoe);
         void Update(SportShoe sportShoe);
+        void UpdateConcurrent(SportShoe sportShoe, byte[] rowVersion);
         void Delete(int id);
         List<SportShoe> GetByBrand(int brandId);
         List<SportShoe> GetBySport(int sportId);
@@ -16,5 +17,6 @@ namespace GestionZapatillas.Repositories.Interfaces
         List<SportShoe> GetSortedByPrice();
         List<SportShoe> GetSortedByBrand();
         bool Exist(string model, int brandId, int sizeId, int? shoeId = null);
+        bool ExistByModelAndBrand(string model, int brandId, int? shoeId = null);
     }
 }

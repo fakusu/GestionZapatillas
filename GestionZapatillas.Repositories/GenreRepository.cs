@@ -5,16 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GestionZapatillas.Repositories
 {
-    public class GenreRepository : IGenreRepository
+    public class GenreRepository : GenericRepository<Genre>, IGenreRepository
     {
-        private readonly ShoeDbContext _context;
+        public GenreRepository(ShoeDbContext context) : base(context) { }
 
-        public GenreRepository(ShoeDbContext context)
-        {
-            _context = context;
-        }
-
-        public List<Genre> GetAll()
+        public override List<Genre> GetAll()
         {
             return _context.Genres.Where(g => g.Active).AsNoTracking().ToList();
         }

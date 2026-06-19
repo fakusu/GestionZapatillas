@@ -15,7 +15,12 @@ namespace GestionZapatillas.IoC
         public static IServiceProvider Configure()
         {
             var services = new ServiceCollection();
+            services.AddApplicationServices();
+            return services.BuildServiceProvider();
+        }
 
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        {
             services.AddDbContext<ShoeDbContext>();
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<ISportRepository, SportRepository>();
@@ -32,8 +37,7 @@ namespace GestionZapatillas.IoC
             services.AddScoped<IValidator<Sport>, SportValidator>();
             services.AddScoped<IValidator<Size>, SizeValidator>();
             services.AddScoped<IValidator<SportShoe>, SportShoeValidator>();
-
-            return services.BuildServiceProvider();
+            return services;
         }
     }
 }

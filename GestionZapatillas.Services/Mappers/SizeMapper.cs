@@ -10,7 +10,8 @@ namespace GestionZapatillas.Services.Mappers
             return new SizeListDto
             {
                 SizeId = size.SizeId,
-                SizeNumber = size.SizeNumber
+                SizeNumber = size.SizeNumber,
+                Active = size.Active
             };
         }
 
@@ -28,7 +29,17 @@ namespace GestionZapatillas.Services.Mappers
             return new SizeUpdateDto
             {
                 SizeId = size.SizeId,
-                SizeNumber = size.SizeNumber
+                SizeNumber = size.SizeNumber,
+                RowVersion = size.RowVersion
+            };
+        }
+
+        public static Size ToEntity(SizeCreateDto dto)
+        {
+            return new Size
+            {
+                SizeNumber = dto.SizeNumber,
+                Active = true
             };
         }
     }

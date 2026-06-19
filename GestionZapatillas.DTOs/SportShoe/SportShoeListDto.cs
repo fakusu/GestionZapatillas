@@ -7,5 +7,6 @@ namespace GestionZapatillas.DTOs.SportShoe
         public decimal Price { get; set; }
         public string BrandName { get; set; } = null!;
         public string SportName { get; set; } = null!;
+        public bool Active { get; set; }
     }
 }

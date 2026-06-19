@@ -12,6 +12,7 @@ namespace GestionZapatillas.Data.Configurations
             builder.HasKey(s => s.SizeId);
             builder.Property(s => s.SizeNumber).IsRequired().HasColumnType("decimal(3,1)");
             builder.Property(s => s.Active).HasDefaultValue(true);
+            builder.Property(s => s.RowVersion).IsRowVersion();
             builder.HasIndex(s => s.SizeNumber).IsUnique().HasDatabaseName("IX_Sizes_SizeNumber");
 
             var sizes = new List<Size>();

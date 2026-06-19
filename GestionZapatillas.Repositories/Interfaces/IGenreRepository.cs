@@ -2,8 +2,7 @@ using GestionZapatillas.Entities;
 
 namespace GestionZapatillas.Repositories.Interfaces
 {
-    public interface IGenreRepository
+    public interface IGenreRepository : IGenericRepository<Genre>
     {
-        List<Genre> GetAll();
     }
 }

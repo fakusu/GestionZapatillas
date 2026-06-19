@@ -13,6 +13,7 @@ namespace GestionZapatillas.Data.Configurations
             builder.Property(b => b.BrandName).IsRequired().HasMaxLength(50);
             builder.Property(b => b.Country).IsRequired().HasMaxLength(50);
             builder.Property(b => b.Active).HasDefaultValue(true);
+            builder.Property(b => b.RowVersion).IsRowVersion();
             builder.HasIndex(b => b.BrandName).IsUnique().HasDatabaseName("IX_Brands_BrandName");
 
             builder.HasData(

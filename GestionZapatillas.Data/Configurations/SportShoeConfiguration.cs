@@ -15,6 +15,7 @@ namespace GestionZapatillas.Data.Configurations
             builder.Property(ss => ss.Price).IsRequired().HasColumnType("decimal(10,2)");
             builder.Property(ss => ss.ReleaseDate).HasColumnType("datetime2");
             builder.Property(ss => ss.Active).HasDefaultValue(true);
+            builder.Property(ss => ss.RowVersion).IsRowVersion();
 
             builder.HasOne(ss => ss.Brand)
                 .WithMany(b => b.SportShoes)

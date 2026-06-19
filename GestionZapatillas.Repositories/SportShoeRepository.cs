@@ -23,7 +23,7 @@ namespace GestionZapatillas.Repositories
         {
             var shoe = _context.SportShoes.Find(id);
             if (shoe == null) return;
-            shoe.Active = false;
+            _context.SportShoes.Remove(shoe);
         }
 
         public bool Exist(string model, int brandId, int sizeId, int? shoeId = null)
@@ -38,10 +38,16 @@ namespace GestionZapatillas.Repositories
                 ss.ShoeId != shoeId);
         }
 
+        public bool ExistByModelAndBrand(string model, int brandId, int? shoeId = null)
+        {
+            if (shoeId == null)
+                return _context.SportShoes.Any(ss => ss.Model == model && ss.BrandId == brandId);
+            return _context.SportShoes.Any(ss => ss.Model == model && ss.BrandId == brandId && ss.ShoeId != shoeId);
+        }
+
         public List<SportShoe> GetAll()
         {
             return _context.SportShoes
-                .Where(ss => ss.Active)
                 .Include(ss => ss.Brand)
                 .Include(ss => ss.Sport)
                 .Include(ss => ss.Genre)
@@ -146,6 +152,37 @@ namespace GestionZapatillas.Repositories
         public void Update(SportShoe sportShoe)
         {
             _context.SportShoes.Update(sportShoe);
+        }
+
+        public void UpdateConcurrent(SportShoe sportShoe, byte[] rowVersion)
+        {
+            var existing = _context.SportShoes
+                .Include(ss => ss.ShoeSizes)
+                .FirstOrDefault(ss => ss.ShoeId == sportShoe.ShoeId);
+            if (existing == null) return;
+
+            var entry = _context.Entry(existing);
+            entry.OriginalValues["RowVersion"] = rowVersion;
+
+            existing.Model = sportShoe.Model;
+            existing.Description = sportShoe.Description;
+            existing.Price = sportShoe.Price;
+            existing.ReleaseDate = sportShoe.ReleaseDate;
+            existing.BrandId = sportShoe.BrandId;
+            existing.SportId = sportShoe.SportId;
+            existing.GenreId = sportShoe.GenreId;
+            existing.Active = sportShoe.Active;
+
+            // Replace sizes
+            existing.ShoeSizes.Clear();
+            foreach (var sz in sportShoe.ShoeSizes)
+            {
+                existing.ShoeSizes.Add(new ShoeSize
+                {
+                    SizeId = sz.SizeId,
+                    QuantityInStock = sz.QuantityInStock
+                });
+            }
         }
     }
 }

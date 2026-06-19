@@ -12,6 +12,7 @@ namespace GestionZapatillas.Data.Configurations
             builder.HasKey(s => s.SportId);
             builder.Property(s => s.SportName).IsRequired().HasMaxLength(20);
             builder.Property(s => s.Active).HasDefaultValue(true);
+            builder.Property(s => s.RowVersion).IsRowVersion();
             builder.HasIndex(s => s.SportName).IsUnique().HasDatabaseName("IX_Sports_SportName");
 
             builder.HasData(

@@ -11,7 +11,8 @@ namespace GestionZapatillas.Services.Mappers
             {
                 BrandId = brand.BrandId,
                 BrandName = brand.BrandName,
-                Country = brand.Country
+                Country = brand.Country,
+                Active = brand.Active
             };
         }
 
@@ -31,7 +32,8 @@ namespace GestionZapatillas.Services.Mappers
             {
                 BrandId = brand.BrandId,
                 BrandName = brand.BrandName,
-                Country = brand.Country
+                Country = brand.Country,
+                RowVersion = brand.RowVersion
             };
         }
 

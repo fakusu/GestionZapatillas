@@ -6,6 +6,7 @@ using GestionZapatillas.DTOs.SportShoe;
 using GestionZapatillas.Services.Interfaces;
 using GestionZapatillas.Services.Mappers;
 using GestionZapatillas.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace GestionZapatillas.Services.Services
 {
@@ -48,6 +49,9 @@ namespace GestionZapatillas.Services.Services
 
         public Result Add(SportShoeCreateDto dto)
         {
+            if (_repository.ExistByModelAndBrand(dto.Model, dto.BrandId))
+                return Result.Fail("Ya existe una zapatilla con ese modelo y marca.");
+
             var shoe = new SportShoe
             {
                 Model = dto.Model,
@@ -83,37 +87,40 @@ namespace GestionZapatillas.Services.Services
 
         public Result Update(SportShoeUpdateDto dto)
         {
-            var shoe = _repository.GetById(dto.ShoeId);
-            if (shoe == null)
-                return Result.Fail("SportShoe not found");
+            if (_repository.ExistByModelAndBrand(dto.Model, dto.BrandId, dto.ShoeId))
+                return Result.Fail("Ya existe otra zapatilla con ese modelo y marca.");
 
-            shoe.Model = dto.Model;
-            shoe.Description = dto.Description;
-            shoe.Price = dto.Price;
-            shoe.ReleaseDate = dto.ReleaseDate;
-            shoe.BrandId = dto.BrandId;
-            shoe.SportId = dto.SportId;
-            shoe.GenreId = dto.GenreId;
-
-            shoe.ShoeSizes.Clear();
-            foreach (var sizeDto in dto.Sizes)
+            var updatedShoe = new SportShoe
             {
-                shoe.ShoeSizes.Add(new ShoeSize
+                ShoeId = dto.ShoeId,
+                Model = dto.Model,
+                Description = dto.Description,
+                Price = dto.Price,
+                ReleaseDate = dto.ReleaseDate,
+                BrandId = dto.BrandId,
+                SportId = dto.SportId,
+                GenreId = dto.GenreId,
+                Active = dto.Active,
+                ShoeSizes = dto.Sizes.Select(s => new ShoeSize
                 {
-                    SizeId = sizeDto.SizeId,
-                    QuantityInStock = sizeDto.QuantityInStock
-                });
-            }
+                    SizeId = s.SizeId,
+                    QuantityInStock = s.QuantityInStock
+                }).ToList()
+            };
 
-            var validation = _validator.Validate(shoe);
+            var validation = _validator.Validate(updatedShoe);
             if (!validation.IsValid)
                 return Result.Fail(validation.Errors.Select(e => e.ErrorMessage));
 
             try
             {
-                _repository.Update(shoe);
+                _repository.UpdateConcurrent(updatedShoe, dto.RowVersion);
                 _unitOfWork.Save();
                 return Result.Ok();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return Result.Concurrency("La zapatilla fue modificada por otro usuario. Reintente.");
             }
             catch (Exception ex)
             {
@@ -132,6 +139,10 @@ namespace GestionZapatillas.Services.Services
                 _repository.Delete(id);
                 _unitOfWork.Save();
                 return Result.Ok();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return Result.Concurrency("La zapatilla fue modificada por otro usuario. Reintente.");
             }
             catch (Exception ex)
             {

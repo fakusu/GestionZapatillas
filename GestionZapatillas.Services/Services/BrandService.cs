@@ -1,20 +1,22 @@
 using FluentValidation;
 using GestionZapatillas.Data;
+using GestionZapatillas.Entities;
 using GestionZapatillas.Repositories.Interfaces;
 using GestionZapatillas.DTOs.Brand;
 using GestionZapatillas.DTOs.Common;
 using GestionZapatillas.Services.Interfaces;
 using GestionZapatillas.Services.Mappers;
+using Microsoft.EntityFrameworkCore;
 
 namespace GestionZapatillas.Services.Services
 {
     public class BrandService : IBrandService
     {
         private readonly IBrandRepository _repository;
-        private readonly IValidator<Entities.Brand> _validator;
+        private readonly IValidator<Brand> _validator;
         private readonly IUnitOfWork _unitOfWork;
 
-        public BrandService(IBrandRepository repository, IValidator<Entities.Brand> validator, IUnitOfWork unitOfWork)
+        public BrandService(IBrandRepository repository, IValidator<Brand> validator, IUnitOfWork unitOfWork)
         {
             _repository = repository;
             _validator = validator;
@@ -31,7 +33,7 @@ namespace GestionZapatillas.Services.Services
         {
             var brand = _repository.GetById(id);
             if (brand == null)
-                return Result.Fail<BrandDetailsDto>("Brand not found");
+                return Result.Fail<BrandDetailsDto>("Marca no encontrada.");
 
             return Result.Ok(BrandMapper.ToDetailsDto(brand));
         }
@@ -40,7 +42,7 @@ namespace GestionZapatillas.Services.Services
         {
             var brand = _repository.GetById(id);
             if (brand == null)
-                return Result.Fail<BrandUpdateDto>("Brand not found");
+                return Result.Fail<BrandUpdateDto>("Marca no encontrada.");
 
             return Result.Ok(BrandMapper.ToUpdateDto(brand));
         }
@@ -61,18 +63,20 @@ namespace GestionZapatillas.Services.Services
             }
             catch (Exception ex)
             {
-                return Result.Fail($"Database error: {ex.InnerException?.Message ?? ex.Message}");
+                return Result.Fail($"Error al guardar: {ex.InnerException?.Message ?? ex.Message}");
             }
         }
 
         public Result Update(BrandUpdateDto dto)
         {
-            var brand = _repository.GetById(dto.BrandId);
-            if (brand == null)
-                return Result.Fail("Brand not found");
-
-            brand.BrandName = dto.BrandName;
-            brand.Country = dto.Country;
+            var brand = new Brand
+            {
+                BrandId = dto.BrandId,
+                BrandName = dto.BrandName,
+                Country = dto.Country,
+                Active = true,
+                RowVersion = dto.RowVersion
+            };
 
             var validation = _validator.Validate(brand);
             if (!validation.IsValid)
@@ -80,12 +84,21 @@ namespace GestionZapatillas.Services.Services
 
             try
             {
+                _repository.Update(brand, dto.BrandId, dto.RowVersion);
                 _unitOfWork.Save();
                 return Result.Ok();
             }
+            catch (KeyNotFoundException)
+            {
+                return Result.Fail("Marca no encontrada.");
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return Result.Concurrency("El registro fue modificado por otro usuario.\nLos cambios no pueden guardarse porque los datos actuales son diferentes a los que usted visualizó.");
+            }
             catch (Exception ex)
             {
-                return Result.Fail($"Database error: {ex.InnerException?.Message ?? ex.Message}");
+                return Result.Fail($"Error al guardar: {ex.InnerException?.Message ?? ex.Message}");
             }
         }
 
@@ -93,17 +106,21 @@ namespace GestionZapatillas.Services.Services
         {
             var brand = _repository.GetById(id);
             if (brand == null)
-                return Result.Fail("Brand not found");
+                return Result.Fail("Marca no encontrada.");
 
             try
             {
-                _repository.Delete(id);
+                _repository.Delete(id, brand.RowVersion);
                 _unitOfWork.Save();
                 return Result.Ok();
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                return Result.Concurrency("El registro fue modificado por otro usuario.\nNo se pudo eliminar.");
+            }
             catch (Exception ex)
             {
-                return Result.Fail($"Database error: {ex.InnerException?.Message ?? ex.Message}");
+                return Result.Fail($"Error al eliminar: {ex.InnerException?.Message ?? ex.Message}");
             }
         }
     }

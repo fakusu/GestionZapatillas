@@ -10,7 +10,8 @@ namespace GestionZapatillas.Services.Mappers
             return new SportListDto
             {
                 SportId = sport.SportId,
-                SportName = sport.SportName
+                SportName = sport.SportName,
+                Active = sport.Active
             };
         }
 
@@ -28,7 +29,8 @@ namespace GestionZapatillas.Services.Mappers
             return new SportUpdateDto
             {
                 SportId = sport.SportId,
-                SportName = sport.SportName
+                SportName = sport.SportName,
+                RowVersion = sport.RowVersion
             };
         }
 
