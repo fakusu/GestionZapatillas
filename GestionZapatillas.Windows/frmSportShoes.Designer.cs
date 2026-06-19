@@ -25,15 +25,15 @@ namespace GestionZapatillas.Windows
             tsbCerrar = new ToolStripButton();
             splitContainer1 = new SplitContainer();
             dgvDatos = new DataGridView();
+            panelBottom = new Panel();
+            lblCantidadLbl = new Label();
+            lblCantidad = new Label();
             colId = new DataGridViewTextBoxColumn();
             colModelo = new DataGridViewTextBoxColumn();
             colMarca = new DataGridViewTextBoxColumn();
             colDeporte = new DataGridViewTextBoxColumn();
             colPrecio = new DataGridViewTextBoxColumn();
             colActivo = new DataGridViewCheckBoxColumn();
-            panelBottom = new Panel();
-            lblCantidadLbl = new Label();
-            lblCantidad = new Label();
             toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -42,71 +42,103 @@ namespace GestionZapatillas.Windows
             ((System.ComponentModel.ISupportInitialize)dgvDatos).BeginInit();
             panelBottom.SuspendLayout();
             SuspendLayout();
+            // 
             // toolStrip1
+            // 
             toolStrip1.ImageScalingSize = new Size(20, 20);
             toolStrip1.Items.AddRange(new ToolStripItem[] { tsbNuevo, tsbEditar, tsbEliminar, sep1, tsbFiltrar, tsbActualizar, sep2, tsbCerrar });
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new Size(980, 27);
             toolStrip1.TabIndex = 1;
+            // 
             // tsbNuevo
+            // 
             tsbNuevo.Name = "tsbNuevo";
             tsbNuevo.Size = new Size(56, 24);
             tsbNuevo.Text = "Nuevo";
             tsbNuevo.Click += tsbNuevo_Click;
+            // 
             // tsbEditar
+            // 
             tsbEditar.Name = "tsbEditar";
             tsbEditar.Size = new Size(52, 24);
             tsbEditar.Text = "Editar";
             tsbEditar.Click += tsbEditar_Click;
+            // 
             // tsbEliminar
+            // 
             tsbEliminar.Name = "tsbEliminar";
             tsbEliminar.Size = new Size(67, 24);
             tsbEliminar.Text = "Eliminar";
             tsbEliminar.Click += tsbEliminar_Click;
+            // 
             // sep1
+            // 
             sep1.Name = "sep1";
             sep1.Size = new Size(6, 27);
+            // 
             // tsbFiltrar
+            // 
             tsbFiltrar.DropDownItems.AddRange(new ToolStripItem[] { activosToolStripMenuItem, noActivosToolStripMenuItem });
             tsbFiltrar.Name = "tsbFiltrar";
             tsbFiltrar.Size = new Size(61, 24);
             tsbFiltrar.Text = "Filtrar";
+            // 
             // activosToolStripMenuItem
+            // 
             activosToolStripMenuItem.Name = "activosToolStripMenuItem";
             activosToolStripMenuItem.Size = new Size(164, 26);
             activosToolStripMenuItem.Text = "Activos";
             activosToolStripMenuItem.Click += activosToolStripMenuItem_Click;
+            // 
             // noActivosToolStripMenuItem
+            // 
             noActivosToolStripMenuItem.Name = "noActivosToolStripMenuItem";
             noActivosToolStripMenuItem.Size = new Size(164, 26);
             noActivosToolStripMenuItem.Text = "No Activos";
             noActivosToolStripMenuItem.Click += noActivosToolStripMenuItem_Click;
+            // 
             // tsbActualizar
+            // 
             tsbActualizar.Name = "tsbActualizar";
             tsbActualizar.Size = new Size(79, 24);
             tsbActualizar.Text = "Actualizar";
             tsbActualizar.Click += tsbActualizar_Click;
+            // 
             // sep2
+            // 
             sep2.Name = "sep2";
             sep2.Size = new Size(6, 27);
+            // 
             // tsbCerrar
+            // 
             tsbCerrar.Name = "tsbCerrar";
             tsbCerrar.Size = new Size(53, 24);
             tsbCerrar.Text = "Cerrar";
             tsbCerrar.Click += tsbCerrar_Click;
+            // 
             // splitContainer1
+            // 
             splitContainer1.Dock = DockStyle.Fill;
             splitContainer1.Location = new Point(0, 27);
             splitContainer1.Margin = new Padding(3, 4, 3, 4);
             splitContainer1.Name = "splitContainer1";
             splitContainer1.Orientation = Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
             splitContainer1.Panel1.Controls.Add(dgvDatos);
+            // 
+            // splitContainer1.Panel2
+            // 
             splitContainer1.Panel2.Controls.Add(panelBottom);
             splitContainer1.Size = new Size(980, 573);
             splitContainer1.SplitterDistance = 497;
             splitContainer1.TabIndex = 0;
+            // 
             // dgvDatos
+            // 
             dgvDatos.AllowUserToAddRows = false;
             dgvDatos.AllowUserToDeleteRows = false;
             dgvDatos.AllowUserToResizeColumns = false;
@@ -126,44 +158,9 @@ namespace GestionZapatillas.Windows
             dgvDatos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvDatos.Size = new Size(980, 497);
             dgvDatos.TabIndex = 0;
-            // colId
-            colId.HeaderText = "Id";
-            colId.MinimumWidth = 6;
-            colId.Name = "colId";
-            colId.ReadOnly = true;
-            colId.Visible = false;
-            colId.Width = 60;
-            // colModelo
-            colModelo.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            colModelo.HeaderText = "Modelo";
-            colModelo.MinimumWidth = 6;
-            colModelo.Name = "colModelo";
-            colModelo.ReadOnly = true;
-            // colMarca
-            colMarca.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            colMarca.HeaderText = "Marca";
-            colMarca.MinimumWidth = 6;
-            colMarca.Name = "colMarca";
-            colMarca.ReadOnly = true;
-            // colDeporte
-            colDeporte.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            colDeporte.HeaderText = "Deporte";
-            colDeporte.MinimumWidth = 6;
-            colDeporte.Name = "colDeporte";
-            colDeporte.ReadOnly = true;
-            // colPrecio
-            colPrecio.HeaderText = "Precio";
-            colPrecio.MinimumWidth = 6;
-            colPrecio.Name = "colPrecio";
-            colPrecio.ReadOnly = true;
-            colPrecio.Width = 100;
-            // colActivo
-            colActivo.HeaderText = "Activo";
-            colActivo.MinimumWidth = 6;
-            colActivo.Name = "colActivo";
-            colActivo.ReadOnly = true;
-            colActivo.Width = 60;
+            // 
             // panelBottom
+            // 
             panelBottom.Controls.Add(lblCantidadLbl);
             panelBottom.Controls.Add(lblCantidad);
             panelBottom.Dock = DockStyle.Fill;
@@ -172,14 +169,18 @@ namespace GestionZapatillas.Windows
             panelBottom.Name = "panelBottom";
             panelBottom.Size = new Size(980, 72);
             panelBottom.TabIndex = 0;
+            // 
             // lblCantidadLbl
+            // 
             lblCantidadLbl.AutoSize = true;
             lblCantidadLbl.Location = new Point(23, 20);
             lblCantidadLbl.Name = "lblCantidadLbl";
             lblCantidadLbl.Size = new Size(154, 20);
             lblCantidadLbl.TabIndex = 0;
             lblCantidadLbl.Text = "Cantidad de registros:";
+            // 
             // lblCantidad
+            // 
             lblCantidad.AutoSize = true;
             lblCantidad.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             lblCantidad.Location = new Point(183, 20);
@@ -187,7 +188,63 @@ namespace GestionZapatillas.Windows
             lblCantidad.Size = new Size(18, 20);
             lblCantidad.TabIndex = 1;
             lblCantidad.Text = "0";
+            // 
+            // colId
+            // 
+            colId.DataPropertyName = "ShoeId";
+            colId.HeaderText = "Id";
+            colId.MinimumWidth = 6;
+            colId.Name = "colId";
+            colId.ReadOnly = true;
+            colId.Visible = false;
+            colId.Width = 60;
+            // 
+            // colModelo
+            // 
+            colModelo.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colModelo.DataPropertyName = "Model";
+            colModelo.HeaderText = "Modelo";
+            colModelo.MinimumWidth = 6;
+            colModelo.Name = "colModelo";
+            colModelo.ReadOnly = true;
+            // 
+            // colMarca
+            // 
+            colMarca.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colMarca.DataPropertyName = "BrandName";
+            colMarca.HeaderText = "Marca";
+            colMarca.MinimumWidth = 6;
+            colMarca.Name = "colMarca";
+            colMarca.ReadOnly = true;
+            // 
+            // colDeporte
+            // 
+            colDeporte.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colDeporte.DataPropertyName = "SportName";
+            colDeporte.HeaderText = "Deporte";
+            colDeporte.MinimumWidth = 6;
+            colDeporte.Name = "colDeporte";
+            colDeporte.ReadOnly = true;
+            // 
+            // colPrecio
+            // 
+            colPrecio.DataPropertyName = "Price";
+            colPrecio.HeaderText = "Precio";
+            colPrecio.MinimumWidth = 6;
+            colPrecio.Name = "colPrecio";
+            colPrecio.ReadOnly = true;
+            // 
+            // colActivo
+            // 
+            colActivo.DataPropertyName = "Active";
+            colActivo.HeaderText = "Activo";
+            colActivo.MinimumWidth = 6;
+            colActivo.Name = "colActivo";
+            colActivo.ReadOnly = true;
+            colActivo.Width = 60;
+            // 
             // frmSportShoes
+            // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(980, 600);
@@ -224,14 +281,14 @@ namespace GestionZapatillas.Windows
         private ToolStripButton tsbCerrar;
         private SplitContainer splitContainer1;
         private DataGridView dgvDatos;
+        private Panel panelBottom;
+        private Label lblCantidadLbl;
+        private Label lblCantidad;
         private DataGridViewTextBoxColumn colId;
         private DataGridViewTextBoxColumn colModelo;
         private DataGridViewTextBoxColumn colMarca;
         private DataGridViewTextBoxColumn colDeporte;
         private DataGridViewTextBoxColumn colPrecio;
         private DataGridViewCheckBoxColumn colActivo;
-        private Panel panelBottom;
-        private Label lblCantidadLbl;
-        private Label lblCantidad;
     }
 }
