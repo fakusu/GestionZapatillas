@@ -23,7 +23,7 @@ namespace GestionZapatillas.Repositories
         {
             var shoe = _context.SportShoes.Find(id);
             if (shoe == null) return;
-            _context.SportShoes.Remove(shoe);
+            shoe.Active = false;
         }
 
         public bool Exist(string model, int brandId, int sizeId, int? shoeId = null)

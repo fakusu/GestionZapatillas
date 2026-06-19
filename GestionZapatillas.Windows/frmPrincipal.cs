@@ -14,7 +14,6 @@ namespace GestionZapatillas.Windows
 
         private void frmPrincipal_Load(object sender, EventArgs e)
         {
-            lblFecha.Text = DateTime.Today.ToString("dd/MM/yyyy");
         }
 
         private void btnBrands_Click(object sender, EventArgs e)
