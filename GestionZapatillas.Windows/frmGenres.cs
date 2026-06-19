@@ -1,13 +1,16 @@
 using GestionZapatillas.DTOs.Genre;
+using GestionZapatillas.DTOs.Sport;
 using GestionZapatillas.Services.Interfaces;
 using GestionZapatillas.Windows.Helpers;
 using Microsoft.Extensions.DependencyInjection;
+using System.ComponentModel;
 
 namespace GestionZapatillas.Windows
 {
     public partial class frmGenres : Form
     {
         private readonly IServiceProvider _serviceProvider;
+        private BindingSource _bindingSource = new BindingSource();
 
         public frmGenres(IServiceProvider serviceProvider)
         {
@@ -24,14 +27,17 @@ namespace GestionZapatillas.Windows
             var resultado = service.GetAll();
             if (resultado.IsFailure) { ErrorHelper.MostrarErrores(resultado.Errors); return; }
             var lista = resultado.Value;
-            GridHelper.LimpiarGrilla(dgvDatos);
+            //GridHelper.LimpiarGrilla(dgvDatos);
             if (lista is null || lista.Count == 0) { lblCantidad.Text = "0"; return; }
-            foreach (var item in lista)
-            {
-                var r = GridHelper.ConstruirFila(dgvDatos);
-                GridHelper.SetearFila(r, item);
-                GridHelper.AgregarFila(r, dgvDatos);
-            }
+            var bindingList = new BindingList<GenreListDto>(lista);
+            _bindingSource.DataSource = bindingList;
+            dgvDatos.DataSource = _bindingSource;
+            //foreach (var item in lista)
+            //{
+            //    var r = GridHelper.ConstruirFila(dgvDatos);
+            //    GridHelper.SetearFila(r, item);
+            //    GridHelper.AgregarFila(r, dgvDatos);
+            //}
             lblCantidad.Text = lista.Count.ToString();
         }
 

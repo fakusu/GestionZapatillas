@@ -18,11 +18,11 @@ namespace GestionZapatillas.Windows
             tsbCerrar = new ToolStripButton();
             splitContainer1 = new SplitContainer();
             dgvDatos = new DataGridView();
-            colId = new DataGridViewTextBoxColumn();
-            colNombre = new DataGridViewTextBoxColumn();
             panelBottom = new Panel();
             lblCantidadLbl = new Label();
             lblCantidad = new Label();
+            colId = new DataGridViewTextBoxColumn();
+            colNombre = new DataGridViewTextBoxColumn();
             toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -101,23 +101,6 @@ namespace GestionZapatillas.Windows
             dgvDatos.Size = new Size(686, 497);
             dgvDatos.TabIndex = 0;
             // 
-            // colId
-            // 
-            colId.HeaderText = "Id";
-            colId.MinimumWidth = 6;
-            colId.Name = "colId";
-            colId.ReadOnly = true;
-            colId.Visible = false;
-            colId.Width = 125;
-            // 
-            // colNombre
-            // 
-            colNombre.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            colNombre.HeaderText = "Género";
-            colNombre.MinimumWidth = 6;
-            colNombre.Name = "colNombre";
-            colNombre.ReadOnly = true;
-            // 
             // panelBottom
             // 
             panelBottom.Controls.Add(lblCantidadLbl);
@@ -147,6 +130,25 @@ namespace GestionZapatillas.Windows
             lblCantidad.Size = new Size(18, 20);
             lblCantidad.TabIndex = 1;
             lblCantidad.Text = "0";
+            // 
+            // colId
+            // 
+            colId.DataPropertyName = "GenreId";
+            colId.HeaderText = "Id";
+            colId.MinimumWidth = 6;
+            colId.Name = "colId";
+            colId.ReadOnly = true;
+            colId.Visible = false;
+            colId.Width = 125;
+            // 
+            // colNombre
+            // 
+            colNombre.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colNombre.DataPropertyName = "GenreName";
+            colNombre.HeaderText = "Género";
+            colNombre.MinimumWidth = 6;
+            colNombre.Name = "colNombre";
+            colNombre.ReadOnly = true;
             // 
             // frmGenres
             // 
@@ -179,10 +181,10 @@ namespace GestionZapatillas.Windows
         private ToolStripButton tsbCerrar;
         private SplitContainer splitContainer1;
         private DataGridView dgvDatos;
-        private DataGridViewTextBoxColumn colId;
-        private DataGridViewTextBoxColumn colNombre;
         private Panel panelBottom;
         private Label lblCantidadLbl;
         private Label lblCantidad;
+        private DataGridViewTextBoxColumn colId;
+        private DataGridViewTextBoxColumn colNombre;
     }
 }

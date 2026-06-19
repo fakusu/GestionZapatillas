@@ -25,12 +25,12 @@ namespace GestionZapatillas.Windows
             tsbCerrar = new ToolStripButton();
             splitContainer1 = new SplitContainer();
             dgvDatos = new DataGridView();
-            colId = new DataGridViewTextBoxColumn();
-            colNombre = new DataGridViewTextBoxColumn();
-            colActivo = new DataGridViewCheckBoxColumn();
             panelBottom = new Panel();
             lblCantidadLbl = new Label();
             lblCantidad = new Label();
+            colId = new DataGridViewTextBoxColumn();
+            colNombre = new DataGridViewTextBoxColumn();
+            colActivo = new DataGridViewCheckBoxColumn();
             toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -156,31 +156,6 @@ namespace GestionZapatillas.Windows
             dgvDatos.Size = new Size(914, 497);
             dgvDatos.TabIndex = 0;
             // 
-            // colId
-            // 
-            colId.HeaderText = "Id";
-            colId.MinimumWidth = 6;
-            colId.Name = "colId";
-            colId.ReadOnly = true;
-            colId.Visible = false;
-            colId.Width = 125;
-            // 
-            // colNombre
-            // 
-            colNombre.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            colNombre.HeaderText = "Deporte";
-            colNombre.MinimumWidth = 6;
-            colNombre.Name = "colNombre";
-            colNombre.ReadOnly = true;
-            // 
-            // colActivo
-            // 
-            colActivo.HeaderText = "Activo";
-            colActivo.MinimumWidth = 6;
-            colActivo.Name = "colActivo";
-            colActivo.ReadOnly = true;
-            colActivo.Width = 60;
-            // 
             // panelBottom
             // 
             panelBottom.Controls.Add(lblCantidadLbl);
@@ -210,6 +185,34 @@ namespace GestionZapatillas.Windows
             lblCantidad.Size = new Size(18, 20);
             lblCantidad.TabIndex = 1;
             lblCantidad.Text = "0";
+            // 
+            // colId
+            // 
+            colId.DataPropertyName = "SportId";
+            colId.HeaderText = "Id";
+            colId.MinimumWidth = 6;
+            colId.Name = "colId";
+            colId.ReadOnly = true;
+            colId.Visible = false;
+            colId.Width = 125;
+            // 
+            // colNombre
+            // 
+            colNombre.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colNombre.DataPropertyName = "SportName";
+            colNombre.HeaderText = "Deporte";
+            colNombre.MinimumWidth = 6;
+            colNombre.Name = "colNombre";
+            colNombre.ReadOnly = true;
+            // 
+            // colActivo
+            // 
+            colActivo.DataPropertyName = "Active";
+            colActivo.HeaderText = "Activo";
+            colActivo.MinimumWidth = 6;
+            colActivo.Name = "colActivo";
+            colActivo.ReadOnly = true;
+            colActivo.Width = 60;
             // 
             // frmSports
             // 
@@ -249,11 +252,11 @@ namespace GestionZapatillas.Windows
         private ToolStripButton tsbCerrar;
         private SplitContainer splitContainer1;
         private DataGridView dgvDatos;
-        private DataGridViewTextBoxColumn colId;
-        private DataGridViewTextBoxColumn colNombre;
-        private DataGridViewCheckBoxColumn colActivo;
         private Panel panelBottom;
         private Label lblCantidadLbl;
         private Label lblCantidad;
+        private DataGridViewTextBoxColumn colId;
+        private DataGridViewTextBoxColumn colNombre;
+        private DataGridViewCheckBoxColumn colActivo;
     }
 }

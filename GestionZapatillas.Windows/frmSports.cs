@@ -2,6 +2,7 @@ using GestionZapatillas.DTOs.Sport;
 using GestionZapatillas.Services.Interfaces;
 using GestionZapatillas.Windows.Helpers;
 using Microsoft.Extensions.DependencyInjection;
+using System.ComponentModel;
 
 namespace GestionZapatillas.Windows
 {
@@ -10,6 +11,8 @@ namespace GestionZapatillas.Windows
         private readonly IServiceProvider _serviceProvider;
         private List<SportListDto>? _lista;
         private bool _filtroActivo = false;
+
+        private BindingSource _bindingSource= new BindingSource();
 
         public frmSports(IServiceProvider serviceProvider)
         {
@@ -31,14 +34,17 @@ namespace GestionZapatillas.Windows
 
         private void MostrarEnGrilla(List<SportListDto>? lista)
         {
-            GridHelper.LimpiarGrilla(dgvDatos);
+            //GridHelper.LimpiarGrilla(dgvDatos);
             if (lista is null || lista.Count == 0) { lblCantidad.Text = "0"; return; }
-            foreach (var item in lista)
-            {
-                var r = GridHelper.ConstruirFila(dgvDatos);
-                GridHelper.SetearFila(r, item);
-                GridHelper.AgregarFila(r, dgvDatos);
-            }
+            var bindingList = new BindingList<SportListDto>(lista);
+            _bindingSource.DataSource = bindingList;
+            dgvDatos.DataSource = _bindingSource;
+            //foreach (var item in lista)
+            //{
+            //    var r = GridHelper.ConstruirFila(dgvDatos);
+            //    GridHelper.SetearFila(r, item);
+            //    GridHelper.AgregarFila(r, dgvDatos);
+            //}
             lblCantidad.Text = lista.Count.ToString();
         }
 
@@ -53,12 +59,12 @@ namespace GestionZapatillas.Windows
 
         private void tsbEditar_Click(object sender, EventArgs e)
         {
-            if (dgvDatos.SelectedRows.Count == 0)
+            if (_bindingSource.Current==null)
             {
                 MessageBox.Show("Debe seleccionar una fila.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            var dto = (SportListDto)dgvDatos.SelectedRows[0].Tag!;
+            var dto = (SportListDto)_bindingSource.Current;
             using var scope = _serviceProvider.CreateScope();
             var service = scope.ServiceProvider.GetRequiredService<ISportService>();
             var resultado = service.GetForUpdate(dto.SportId);
@@ -72,12 +78,12 @@ namespace GestionZapatillas.Windows
 
         private void tsbEliminar_Click(object sender, EventArgs e)
         {
-            if (dgvDatos.SelectedRows.Count == 0)
+            if (_bindingSource.Current == null)
             {
                 MessageBox.Show("Debe seleccionar una fila.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            var dto = (SportListDto)dgvDatos.SelectedRows[0].Tag!;
+            var dto = (SportListDto)_bindingSource.Current;
             var dr = MessageBox.Show($"¿Desea eliminar el deporte '{dto.SportName}'?", "Confirmar",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
             if (dr == DialogResult.No) return;
